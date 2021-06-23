@@ -1,0 +1,17 @@
+[Unit]
+Description=Scheduling_Maker-uWSGI-instance
+After=network.target postgresql-11.service
+
+[Service]
+User=centos
+Group=nginx
+WorkingDirectory=/opt/Scheduling_Maker
+Environment="PATH=/opt/Scheduling_Maker/venv/bin"
+ExecStart=/opt/Scheduling_Maker/venv/bin/uwsgi --ini /opt/Scheduling_Maker/uwsgi/uwsgi.ini
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
