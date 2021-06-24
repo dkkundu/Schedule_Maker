@@ -6,7 +6,6 @@ from django.conf import settings
 
 
 class ScheduleEventManager(models.Manager):
-
     def custom_filter(self):
         return ScheduleEvent.objects.filter(
             is_deleted=False
@@ -24,11 +23,20 @@ class ScheduleEvent(AbstractBaseFields):
     start_date = models.DateTimeField(
         _("Start Date"), null=True, blank=True
     )
+    end_date = models.DateTimeField(
+        _("End Date"), null=True, blank=True
+    )
+    allDay = models.BooleanField(
+        default=False
+    )
+    description = models.TextField(
+        blank=True, null=True
+    )
     event_type = models.ForeignKey(
         EventType, on_delete=models.SET_NULL,
         blank=True, null=True
     )
     objects = ScheduleEventManager()
 
-    def __init__(self):
+    def __str__(self):
         return self.name

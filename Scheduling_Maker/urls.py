@@ -29,7 +29,7 @@ urlpatterns = [
     path('', include('django_prometheus.urls')),
 
     # prometheus url ----------------------------------------------------------
-    path('calender', include('drop_calendar.urls')),
+    path('calender/', include('drop_calendar.urls')),
 
     # admin urls --------------------------------------------------------------
     path(f'{settings.ADMIN_URL}/', admin.site.urls),

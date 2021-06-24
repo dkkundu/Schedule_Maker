@@ -1,5 +1,21 @@
-from .index_view import CalenderIndexPage
+from .index_view import (
+    CalenderIndexPage,
+    CalenderIndexPage2,
+    calendar,
+    event,
+    add_event,
+    update,
+    remove,
+
+)
 
 __all__ = [
-    'CalenderIndexPage',
+    CalenderIndexPage,
+    CalenderIndexPage2,
+    calendar,
+    event,
+    add_event,
+    update,
+    remove,
+
 ]
