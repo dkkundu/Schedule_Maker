@@ -101,6 +101,7 @@ PLUGIN_APPS = [
     'django_celery_beat',
     # https://django-dbbackup.readthedocs.io/
     'dbbackup',
+    'crispy_forms',
 ]
 
 # add project applications here
@@ -157,6 +158,8 @@ AUTH_USER_MODEL = 'Core.User'
 LOGIN_URL = '/auth/login/'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Database --------------------------------------------------------------------

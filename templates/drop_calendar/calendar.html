@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+{% load crispy_forms_tags %}
+
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'drop_calendar/css/main.css' %}">
@@ -92,10 +94,14 @@
             <div class="col-md-3">
               <div id="external-events">
                 <h4 class="mb-4">Draggable Events</h4>
-                <div>
-                  <button class="fc-event" id="id_save"> Save Your Update </button>
-
-                </div>
+                  <form id="application_form" enctype="multipart/form-data" class="form-register" method="POST" accept-charset="UTF-8"
+                  data-event-url={% url 'drop_calendar:add_event' %}>
+                   {% crispy events %}
+                  <div>
+                    <button type="button" class="btn btn-outline-success fc-event" id="id_save"> Save Your Update </button>
+                  </div>
+                  </form>
+                <div id="demo"></div>
               </div>
             </div>
             <div class="col-md-9">
@@ -114,8 +120,7 @@
      <script>
 $(function(){
     $("#scheduler").dxScheduler({
-        timeZone: "America/Los_Angeles",
-        dataSource: data,
+        dataSource: save_event,
         views: ["week", "month"],
         currentView: "week",
         currentDate: new Date(2021, 02, 28),
@@ -124,11 +129,29 @@ $(function(){
     }).dxScheduler("instance");
 });
 
-var data = {{ data|safe }};
+var save_event = {{ data|safe }};
+
 
 $("#id_save" ).on( "click", function() {
-  console.log(data);
+    var url = $("#application_form").attr("data-event-url");
+    for(var i = 0; i <save_event.length; i++){
+        $.ajax({
+        url: url,
+        data: {
+        'name': save_event[i].text,
+        'start_date': save_event[i].start_date,
+        'end_date': save_event[i].end_date,
+        'allDay': save_event[i].allDay,
+        'description': save_event[i].description,
+        },
+        success: function (data) {
+        console.log(data)
+        console.log(save_event)
+        }
+    });
+    };
 });
-      </script>
+ </script>
+
   </body>
 </html>

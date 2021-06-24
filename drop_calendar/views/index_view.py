@@ -1,6 +1,7 @@
 import json
 from django.views.generic import TemplateView  # View,
 from drop_calendar.models import ScheduleEvent, Events
+from drop_calendar.forms import GroupOrClass
 import datetime
 from django.shortcuts import HttpResponse, render
 from django.http import JsonResponse
@@ -16,20 +17,20 @@ class CalenderIndexPage(TemplateView):
         event_arr = []
         if query:
             for i in query:
-                event_sub_arr = {'allDay': 'false'}
+                event_sub_arr = {'allDay': i.allDay}
                 start_date = i.start_date.strftime("%Y/%m/%d %H:%M:%S")
                 end_date = i.end_date.strftime("%Y/%m/%d %H:%M:%S")
                 print(start_date)
                 event_sub_arr['startDate'] = start_date
                 event_sub_arr['endDate'] = end_date
                 event_sub_arr['text'] = i.name
-                event_sub_arr['description']: i.description
+                event_sub_arr['description'] = i.description
                 event_arr.append(event_sub_arr)
                 # return HttpResponse(json.dumps(event_arr))
 
         print("data----", event_arr)
-        context["data"] = event_arr
-        context["data2"] = query
+        context["data"] = json.dumps(event_arr)
+        context["events"] = GroupOrClass
         return context
 
 
@@ -65,7 +66,7 @@ def event(request):
         "get_event_types":get_event_types,
 
     }
-    return render(request, 'admin/poll/event_management.html',context)
+    return render(request, 'admin/poll/event_management.html', context)
 
 
 def calendar(request):
@@ -77,11 +78,20 @@ def calendar(request):
 
 
 def add_event(request):
-    start = request.GET.get("start", None)
-    end = request.GET.get("end", None)
-    title = request.GET.get("title", None)
-    event = Events(name=str(title), start=start, end=end)
-    event.save()
+    name = request.GET.get("name", None)
+    start_date = request.GET.get("start_date", None)
+    end_date = request.GET.get("end_date", None)
+    allDay = request.GET.get("allDay", None)
+    description = request.GET.get("description", None)
+    # end = request.GET.get("end", None)
+    # title = request.GET.get("title", None)
+    # event = Events(name=str(title), start=start, end=end)
+    # event.save()
+    print("name--------", name)
+    print("start_date--------", start_date)
+    print("end_date--------", end_date)
+    print("allDay--------", allDay)
+    print("description--------", description)
     data = {}
     return JsonResponse(data)
 
