@@ -8,7 +8,7 @@ pipeline {
     environment {
         GH_SCRIPT = 'scripts/repo_status_update.sh'
         GH_OWNER = 'Tiger-Park-Limited'
-        GH_REPO = 'Scheduling_Maker'
+        GH_REPO = 'Schedule_Maker'
         GH_TOKEN = credentials('TPL_Repo_Status')
         PROJ_NAME = "$GH_REPO"
         PROJ_DIR = "/opt/$GH_REPO"
@@ -63,8 +63,8 @@ pipeline {
                         $PROJ_ENV/python manage.py wait_for_db
                         $PROJ_ENV/python manage.py migrate --noinput
                         $PROJ_ENV/python manage.py collectstatic --noinput
-                        sudo systemctl restart scheduling_maker
-                        sudo systemctl status scheduling_maker
+                        sudo systemctl restart Schedule_Maker
+                        sudo systemctl status Schedule_Maker
                     \"
                 """
             }

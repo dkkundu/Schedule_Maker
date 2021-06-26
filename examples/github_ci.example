@@ -1,4 +1,4 @@
-name: Scheduling_Maker_CI
+name: Schedule_Maker_CI
 
 # https://docs.github.com/en/actions/reference/events-that-trigger-workflows#example-using-multiple-events-with-activity-types-or-configuration
 # Trigger only on push and pull_request, but only for main branch
@@ -65,7 +65,7 @@ jobs:
       - name: configure project
         run: |
           mkdir -p logs && mkdir -p media/uploads
-          cp examples/local_settings.example Scheduling_Maker/local_settings.py
+          cp examples/local_settings.example Schedule_Maker/local_settings.py
       # initialize project with makemigrations and migrate
       - name: run migrations
         env:
@@ -82,7 +82,7 @@ jobs:
           DB_USER: $DB_USER
           DB_PASS: $DB_PASS
         run: |
-          celery worker -A Scheduling_Maker -l info &
+          celery worker -A Schedule_Maker -l info &
           coverage run manage.py test
           coverage xml -o coverage.xml
           coverage report

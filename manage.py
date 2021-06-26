@@ -8,7 +8,7 @@ import sys
 def main():
     """Django manage.py main() function"""
     os.environ.setdefault(
-        'DJANGO_SETTINGS_MODULE', 'Scheduling_Maker.settings'
+        'DJANGO_SETTINGS_MODULE', 'Schedule_Maker.settings'
     )
     try:
         from django.core.management import execute_from_command_line

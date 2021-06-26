@@ -1,4 +1,4 @@
-"""Scheduling_Maker > utils.py"""
+"""Schedule_Maker > utils.py"""
 # PYTHON IMPORTS
 import logging
 from sys import _getframe

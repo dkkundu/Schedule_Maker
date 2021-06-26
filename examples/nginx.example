@@ -1,23 +1,23 @@
 upstream uwsgi {
-        server unix:/opt/Scheduling_Maker/uwsgi/uwsgi.sock;
+        server unix:/opt/Schedule_Maker/uwsgi/uwsgi.sock;
 }
 
 server {
         listen 80;
         server_name _;
 
-        access_log /opt/Scheduling_Maker/logs/access.log;
-        error_log /opt/Scheduling_Maker/logs/error.log;
+        access_log /opt/Schedule_Maker/logs/access.log;
+        error_log /opt/Schedule_Maker/logs/error.log;
 
         charset utf-8;
         client_max_body_size 16M;
 
         location /static {
-                alias /opt/Scheduling_Maker/static;
+                alias /opt/Schedule_Maker/static;
         }
 
         location /media {
-                alias /opt/Scheduling_Maker/media;
+                alias /opt/Schedule_Maker/media;
         }
 
         location / {

@@ -1,5 +1,5 @@
 """
-Logging settings for Scheduling_Maker project.
+Logging settings for Schedule_Maker project.
 
 Must be at the same directory as the settings.py file.
 
@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/logging/
 # PYTHON IMPORTS
 import os
 # PROJECT IMPORTS
-from Scheduling_Maker.local_settings import LOGS_DIR
+from Schedule_Maker.local_settings import LOGS_DIR
 
 
 LOGGING = {

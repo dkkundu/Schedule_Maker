@@ -1,5 +1,5 @@
 """
-WSGI config for Scheduling_Maker project.
+WSGI config for Schedule_Maker project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -13,7 +13,7 @@ from django.core.wsgi import get_wsgi_application
 
 
 os.environ.setdefault(
-    'DJANGO_SETTINGS_MODULE', 'Scheduling_Maker.settings'
+    'DJANGO_SETTINGS_MODULE', 'Schedule_Maker.settings'
 )
 
 application = get_wsgi_application()

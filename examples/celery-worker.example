@@ -1,15 +1,15 @@
 ; ==================================
-;  Scheduling_Maker celery worker supervisor
+;  Schedule_Maker celery worker supervisor
 ; ==================================
 
 ; the name of your supervisord program
 [program:celery-worker]
 
 ; Set full path to celery program if using virtualenv
-command=/opt/Scheduling_Maker/venv/bin/celery worker -A Scheduling_Maker -l INFO
+command=/opt/Schedule_Maker/venv/bin/celery worker -A Schedule_Maker -l INFO
 
 ; The directory to your Django project
-directory=/opt/Scheduling_Maker
+directory=/opt/Schedule_Maker
 
 ; If supervisord is run as the root user, switch users to this UNIX user account before doing any processing.
 user=centos
@@ -21,10 +21,10 @@ numprocs=1
 ;process_name=celery%(process_num)d
 
 ; Put process stdout output in this file
-stdout_logfile=/opt/Scheduling_Maker/logs/celery.log
+stdout_logfile=/opt/Schedule_Maker/logs/celery.log
 
 ; Put process stderr output in this file
-stderr_logfile=/opt/Scheduling_Maker/logs/celery.log
+stderr_logfile=/opt/Schedule_Maker/logs/celery.log
 
 ; If true, this program will start automatically when supervisord is started
 autostart=true

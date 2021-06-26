@@ -1,5 +1,5 @@
 """
-Local settings for Scheduling_Maker project.
+Local settings for Schedule_Maker project.
 
 Must be at the same directory as the settings.py file.
 
@@ -48,9 +48,9 @@ DB_CONFIG = {
     'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
     'HOST': os.getenv('DB_HOST', '127.0.0.1'),
     'PORT': os.getenv('DB_PORT', 5432),
-    'NAME': os.getenv('DB_NAME', 'scheduling_maker_db'),
-    'USER': os.getenv('DB_USER', 'scheduling_maker_user'),
-    'PASSWORD': os.getenv('DB_PASS', 'scheduling_maker_pass')
+    'NAME': os.getenv('DB_NAME', 'Schedule_Maker_db'),
+    'USER': os.getenv('DB_USER', 'Schedule_Maker_user'),
+    'PASSWORD': os.getenv('DB_PASS', 'Schedule_Maker_pass')
 }
 
 # mysql defaults:

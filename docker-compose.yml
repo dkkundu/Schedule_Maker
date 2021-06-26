@@ -2,11 +2,11 @@ version: "3.7"
 
 services:
   mq:
-    container_name: Scheduling_Maker_mq
+    container_name: Schedule_Maker_mq
     image: rabbitmq:3-alpine
 
   db:
-    container_name: scheduling_maker_db
+    container_name: Schedule_Maker_db
     image: postgres:12-alpine
     ports:
       - "5432:5432"
@@ -16,13 +16,13 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   app:
-    container_name: scheduling_maker_app
+    container_name: Schedule_Maker_app
     build:
       context: .
     ports:
     - "8000:8000"
     volumes:
-    - .:/Scheduling_Maker
+    - .:/Schedule_Maker
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate --noinput &&
@@ -36,14 +36,14 @@ services:
       - db
 
   celeryworker:
-    container_name: Scheduling_Maker_celery
+    container_name: Schedule_Maker_celery
     build:
       context: .
       dockerfile: Dockerfile
     environment:
       - DISABLE_LOGGING=True
       - CELERY_BROKER_URL=amqp://mq:5672/
-    command: celery worker -A Scheduling_Maker -l INFO
+    command: celery worker -A Schedule_Maker -l INFO
     depends_on:
       - mq
       - db

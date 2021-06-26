@@ -12,9 +12,9 @@ RUN pip install -r /requirements.txt
 
 RUN apk del --no-cache .build-deps
 
-RUN mkdir /Scheduling_Maker
-WORKDIR /Scheduling_Maker
-COPY . /Scheduling_Maker
+RUN mkdir /Schedule_Maker
+WORKDIR /Schedule_Maker
+COPY . /Schedule_Maker
 
 RUN addgroup -g 994 jenkins
 RUN adduser -D -u 997 jenkins -G jenkins

@@ -2,13 +2,13 @@
 # https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/uwsgi/
 
 # the base directory (full path)
-chdir           = /opt/Scheduling_Maker
+chdir           = /opt/Schedule_Maker
 
 # Django's wsgi file (this will be the folder name where wsgi.py and settings.py is)
-module          = Scheduling_Maker.wsgi
+module          = Schedule_Maker.wsgi
 
 # the virtualenv (full path)
-home            = /opt/Scheduling_Maker/venv
+home            = /opt/Schedule_Maker/venv
 
 # process-related settings
 master          = true
@@ -19,7 +19,7 @@ threads         = 2
 enable-threads  = True
 
 # the socket (use the full path to be safe
-socket          = /opt/Scheduling_Maker/uwsgi/uwsgi.sock
+socket          = /opt/Schedule_Maker/uwsgi/uwsgi.sock
 
 # ... with appropriate permissions - may be needed
 chmod-socket    = 666

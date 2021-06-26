@@ -1,4 +1,4 @@
-"""Scheduling_Maker URL Configuration
+"""Schedule_Maker URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -64,6 +64,6 @@ if settings.DEBUG:
     ] + urlpatterns
 
 # admin site customizations ---------------------------------------------------
-admin.sites.AdminSite.site_header = "Scheduling_Maker Administration"
-admin.sites.AdminSite.site_title = "Scheduling_Maker Administration"
-admin.sites.AdminSite.index_title = "Scheduling_Maker Admin Panel"
+admin.sites.AdminSite.site_header = "Schedule_Maker Administration"
+admin.sites.AdminSite.site_title = "Schedule_Maker Administration"
+admin.sites.AdminSite.index_title = "Schedule_Maker Admin Panel"

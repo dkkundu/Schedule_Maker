@@ -1,32 +1,32 @@
 ; ==================================
-;  Scheduling_Maker daphne supervisor
+;  Schedule_Maker daphne supervisor
 ; ==================================
 
-[fcgi-program:Scheduling_Maker-daphne]
+[fcgi-program:Schedule_Maker-daphne]
 ; TCP socket used by Nginx backend upstream
 socket=tcp://0.0.0.0:8000
 
 ; Directory where your site's project files are located
-directory=/opt/Scheduling_Maker
+directory=/opt/Schedule_Maker
 
 ; If supervisord is run as the root user, switch users to this UNIX user account before doing any processing.
 user=centos
 
 ; Each process needs to have a separate socket file, so we use process_num
-command=/opt/Scheduling_Maker/venv/bin/daphne -u /opt/Scheduling_Maker/daphne%(process_num)d.sock --fd 0 --access-log - --proxy-headers Scheduling_Maker.asgi:application
+command=/opt/Schedule_Maker/venv/bin/daphne -u /opt/Schedule_Maker/daphne%(process_num)d.sock --fd 0 --access-log - --proxy-headers Schedule_Maker.asgi:application
 
 ; Number of processes to startup, roughly the number of CPUs you have
 numprocs=2
 
 ; Give each process a unique name so they can be told apart
-process_name=Scheduling_Maker-daphne%(process_num)d
+process_name=Schedule_Maker-daphne%(process_num)d
 
 ; Automatically start and recover processes
 autostart=true
 autorestart=true
 
 ; Choose where you want your log to go
-stdout_logfile=/opt/Scheduling_Maker/logs/daphne.log
+stdout_logfile=/opt/Schedule_Maker/logs/daphne.log
 redirect_stderr=true
 
 ; The total number of seconds which the program needs to stay running after
