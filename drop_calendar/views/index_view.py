@@ -17,19 +17,19 @@ class CalenderIndexPage(TemplateView):
         event_arr = []
         if query:
             for i in query:
-                event_sub_arr = {'allDay': i.allDay}
-                start_date = i.start_date.strftime("%Y/%m/%d %H:%M:%S")
-                end_date = i.end_date.strftime("%Y/%m/%d %H:%M:%S")
+                event_sub_arr = {}
+                start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
+                end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
                 print(start_date)
-                event_sub_arr['startDate'] = start_date
-                event_sub_arr['endDate'] = end_date
-                event_sub_arr['text'] = i.name
-                event_sub_arr['description'] = i.description
+                event_sub_arr['title'] = i.name
+                event_sub_arr['start'] = start_date
+                event_sub_arr['end'] = end_date
                 event_arr.append(event_sub_arr)
                 # return HttpResponse(json.dumps(event_arr))
 
         print("data----", event_arr)
-        context["data"] = json.dumps(event_arr)
+        context["event_data"] = json.dumps(event_arr)
+        print(context["event_data"])
         context["events"] = GroupOrClass
         return context
 
