@@ -1,19 +1,55 @@
 import json
-from django.views.generic import TemplateView  # View,
+import logging
+from django.views.generic import  View
 from drop_calendar.models import ScheduleEvent, Events
-from drop_calendar.forms import GroupOrClass
+from drop_calendar.forms import GroupOrClass, ScheduleEventForm
 import datetime
+from django.contrib import messages
 from django.shortcuts import HttpResponse, render
 from django.http import JsonResponse
+logger = logging.getLogger(__name__)
 
 
-class CalenderIndexPage(TemplateView):
+class CalenderIndexPage(View):
     template_name = "drop_calendar/calendar.html"
     model = ScheduleEvent
 
-    def get_context_data(self, **kwargs):
-        context = super(CalenderIndexPage, self).get_context_data(**kwargs)
+    def get(self, request, **kwargs):
         query = self.model.objects.custom_filter()
+        event_arr = []
+        if query:
+            for i in query:
+                if i.name and i.start_date and i.end_date:
+                    event_sub_arr = {'id': i.pk}
+                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    print(start_date)
+                    event_sub_arr['title'] = i.name
+                    event_sub_arr['start'] = start_date
+                    event_sub_arr['end'] = end_date
+                    event_arr.append(event_sub_arr)
+
+        context = {
+            "event_data": json.dumps(event_arr),
+            "event": query,
+            "form": ScheduleEventForm,
+            "events": GroupOrClass
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        query = self.model.objects.custom_filter()
+        form = ScheduleEventForm(request.POST)
+        if form.is_valid():
+            save_form = form.save(commit=False)
+            # save_form.created_user = self.request.user
+            save_form.save()
+        else:
+            print(form.errors)
+            messages.warning(request, "Unable to Save Data")
+            logger.debug(request,"Unable to Save Data")
+
         event_arr = []
         if query:
             for i in query:
@@ -25,18 +61,16 @@ class CalenderIndexPage(TemplateView):
                 event_sub_arr['start'] = start_date
                 event_sub_arr['end'] = end_date
                 event_arr.append(event_sub_arr)
-                # return HttpResponse(json.dumps(event_arr))
 
-        print("data----", event_arr)
-        context["event_data"] = json.dumps(event_arr)
-        print(context["event_data"])
-        context["events"] = GroupOrClass
-        return context
+        context = {
+            "event_data": json.dumps(event_arr),
+            "form": ScheduleEventForm,
+            "events": GroupOrClass,
+            "event": query,
+        }
 
+        return render(request, self.template_name, context)
 
-
-class CalenderIndexPage2(TemplateView):
-    template_name = "drop_calendar/calendar2.html"
 
 
 def event(request):
@@ -62,8 +96,8 @@ def event(request):
         return HttpResponse(json.dumps(event_arr))
 
     context = {
-        "events":all_events,
-        "get_event_types":get_event_types,
+        "events": all_events,
+        "get_event_types": get_event_types,
 
     }
     return render(request, 'admin/poll/event_management.html', context)

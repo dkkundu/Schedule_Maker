@@ -1,8 +1,25 @@
 {% extends 'drop_calendar/base.html' %}
 {% load static %}
 {% block title %}
+{% load crispy_forms_tags %}
     DK
 {% endblock title %}
+{% block style %}
+  <link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet" />
+  <link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet" />
+
+<style>
+    .bootstrap-datetimepicker-widget table td a[data-action="close"]>span:hover {
+  /* Set her your custom color */
+  background-color: #337ab7;
+  color: #fff;
+}
+.xdsoft_calendar {
+    background: #d82121;
+}
+</style>
+
+{% endblock style %}
 
 
 {% block content %}
@@ -12,18 +29,79 @@
             <div class="col-md-3">
                 <div id="external-events">
                     <h4 class="mb-4">Draggable Events</h4>
+                    {% for dbj in event %}
 
-                    <div class="fc-event">{{ event_data|safe }}</div>
-                    <p class="animated-checkbox mt-20">
-                        <label>
-                            <input id="drop-remove" type="checkbox"><span class="label-text">Remove after drop</span>
-                        </label>
-                    </p>
+                    <div class="fc-event">
+                        Subject:  {{ dbj.name }} <br>
+                        Start Date :{{ dbj.start_date|date:"M d, Y " }}<br>
+                        End Date :{{ dbj.end_date|date:"M d, Y " }}
+                    </div>
+                    {% endfor %}
+
                 </div>
             </div>
             <div class="col-md-9">
                 <div id="calendar"></div>
             </div>
+
+
+
+
+            <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <h5 class="modal-title text-white" id="exampleModalLongTitle">Add New Class/Event</h5>
+                            <button id="modalClose1" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                {{ form|crispy }}
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modalClose2" type="button" class="btn btn-danger">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+<!--            delete Modal-->
+
+            <div class="modal fade show" id="DeleteEventModal" tabindex="-1" role="dialog" aria-labelledby="DeleteEventModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle">DELETE SUBJECT OR EVENT</h5>
+                            <button id="DeleteEventModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                            <div class="modal-body">
+                                <h2>Class/Event name : <span id="event_id_name"></span></h2>
+                                <h4>Class/Event Start Date : <span id="event_id_start"></span></h4>
+                                <h4>Class/Event End Date : <span id="event_id_end"></span></h4>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button id="DeleteEventModalclose2" type="button" class="btn btn-danger">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
         </div>
     </div>
 </div>
@@ -31,31 +109,42 @@
 
 
 {% block extra_ja %}
-<script src="{% static 'drop_calendar/js/coustom.js' %}"></script>
+<script src="{% static 'drop_calendar/calender/main.js' %}"></script>
+<script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
+<script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
+
 <script>
-  $('#calendar').fullCalendar({
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-      navLinks: true,
-      selectable: true,
-      selectMirror: true,
-      editable: true,
-      droppable: true,
+      $(document).ready(function() {
+        	$.datetimepicker.setLocale('pt-BR');
+       	$('#id_start_date').datetimepicker({
+       	 format:'Y-m-d H:i',
+       	});
+      });
 
-      eventClick: function(arg) {
-            if (confirm('Are you sure you want to delete this event?')) {
-              arg.event.remove()
-            }
-          },
-      events: {{ event_data|safe }}
- });
+      $(document).ready(function() {
+        	$.datetimepicker.setLocale('pt-BR');
+       	$('#id_end_date').datetimepicker({
+       	     format:'Y-m-d H:i',
+       	});
+      });
 
- document.addEventListener('DOMContentLoaded', function() {
+</script>
+
+<script>
+       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var today = new Date();
+
+        var formatDate = function(date) {
+           return date.getDate() + "-"
+           + date.getMonth() + "-"
+           + date.getFullYear() + " "
+           +  ('0' + date.getHours()).slice(-2)
+           + ":" + ('0' + date.getMinutes()).slice(-2)
+           + ":" + ('0' + date.getSeconds()).slice(-2)
+           + ' ' + (date.getHours() < 12 ? 'AM' : 'PM');
+         }
+
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
           headerToolbar: {
@@ -64,24 +153,29 @@
             right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
           },
           initialDate: today,
+
           navLinks: true, // can click day/week names to navigate views
           selectable: true,
           selectMirror: true,
           select: function(arg) {
+            console.log('clicked')
+            var modal = document.getElementById('eventModal')
+            modal.style.display = 'block'
             calendar.unselect()
           },
-          // THIS KEY WON'T WORK IN PRODUCTION!!!
-          // To make your own Google API key, follow the directions here:
-          // http://fullcalendar.io/docs/google_calendar/
-          // googleCalendarApiKey: 'AIzaSyCqCxjjLtjbtkX37aOtWB8OfwBLy_6QuYk',
 
-          // bangladesh Holidays
-          // events: 'bn.bd#holiday@group.v.calendar.google.com',
-          eventClick: function(arg) {
-            if (confirm('Are you sure you want to delete this event?')) {
-              arg.event.remove()
-            }
+
+          eventClick: function(info) {
+            console.log('clicked DeleteEventModal')
+            var modal = document.getElementById('DeleteEventModal')
+            $("#event_id_name").text(info.event.title)
+            $("#event_id_start").text(formatDate(info.event.start))
+            $("#event_id_end").text(formatDate(info.event.end))
+            modal.style.display = 'block'
+            calendar.unselect()
+
           },
+
           editable: true,
           dayMaxEvents: true, // allow "more" link when too many events
           events: {{ event_data|safe }},
@@ -89,7 +183,16 @@
 
         calendar.render();
       });
-
+      const closeBtn1 = document.getElementById('modalClose1');
+      const closeBtn2 = document.getElementById('modalClose2');
+      closeBtn1.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
+      closeBtn2.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
 </script>
 {% endblock %}
 
