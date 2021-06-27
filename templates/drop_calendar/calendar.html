@@ -74,8 +74,6 @@ span.asteriskField {
                 </div>
             </div>
 
-
-
 <!--            delete Modal-->
 
             <div class="modal fade show" id="DeleteEventModal" tabindex="-1" role="dialog" aria-labelledby="DeleteEventModalCenterTitle" aria-hidden="true">
@@ -100,8 +98,6 @@ span.asteriskField {
                     </div>
                 </div>
             </div>
-
-
         </div>
 
 
@@ -138,15 +134,11 @@ function getEventDeleteUrl(pk){
         var calendarEl = document.getElementById('calendar');
         var today = new Date();
 
-        var formatDate = function(date) {
-           return date.getDate() + "-"
-           + date.getMonth() + "-"
-           + date.getFullYear() + " "
-           +  ('0' + date.getHours()).slice(-2)
-           + ":" + ('0' + date.getMinutes()).slice(-2)
-           + ":" + ('0' + date.getSeconds()).slice(-2)
-           + ' ' + (date.getHours() < 12 ? 'AM' : 'PM');
-         }
+        var formatDate  =  function getSQLDate(date) {
+        var time = date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()
+        +" "+date.getHours()+":"+getMinutes()+":"+getSeconds()
+        return time
+        };
 
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -157,7 +149,6 @@ function getEventDeleteUrl(pk){
           },
           initialDate: today,
 
-          navLinks: true, // can click day/week names to navigate views
           selectable: true,
           selectMirror: true,
           select: function(arg) {
@@ -169,11 +160,10 @@ function getEventDeleteUrl(pk){
 
 
           eventClick: function(info) {
-            console.log('clicked DeleteEventModal')
             var modal = document.getElementById('DeleteEventModal')
             $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(formatDate(info.event.start))
-            $("#event_id_end").text(formatDate(info.event.end))
+            $("#event_id_start").text(info.event.start)
+            $("#event_id_end").text(info.event.end)
 
             getEventDeleteUrl(info.event.id)
             getEventUpdateUrl(info.event.id)
