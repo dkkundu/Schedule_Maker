@@ -2,7 +2,7 @@ import json
 import logging
 
 from django.urls import reverse_lazy
-from django.views.generic import View
+from django.views.generic import View, UpdateView
 from drop_calendar.models import ScheduleEvent, Events
 from drop_calendar.forms import GroupOrClass, ScheduleEventForm
 import datetime
@@ -45,38 +45,111 @@ class CalenderIndexPage(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        query = self.model.objects.custom_filter()
         form = ScheduleEventForm(request.POST)
         if form.is_valid():
             save_form = form.save(commit=False)
             # save_form.created_user = self.request.user
             save_form.save()
+            messages.success(request, "Successfully Updated")
+            logger.debug("Successfully Updated")
+            return redirect("drop_calendar:calender_view")
         else:
             print(form.errors)
             messages.warning(request, "Unable to Save Data")
-            logger.debug(request,"Unable to Save Data")
+            logger.debug(request, "Unable to Save Data")
+            return redirect("drop_calendar:calender_view")
 
-        event_arr = []
-        if query:
-            for i in query:
-                event_sub_arr = {}
-                start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-                end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
-                print(start_date)
-                event_sub_arr['title'] = i.name
-                event_sub_arr['start'] = start_date
-                event_sub_arr['end'] = end_date
-                event_arr.append(event_sub_arr)
+
+class ScheduleEventUpdate(View):
+    template_name = "drop_calendar/calendar_update.html"
+    model = ScheduleEvent
+
+    def get(self, request, **kwargs):
+        pk = self.kwargs.get('pk')
+        if pk:
+            data_set = self.model.objects.get(
+                pk=pk
+            )
+
+            query = self.model.objects.custom_filter()
+            event_arr = []
+            if query:
+                for i in query:
+                    if i.name and i.start_date and i.end_date:
+                        event_sub_arr = {'id': i.pk}
+                        start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
+                        end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                        print(start_date)
+                        event_sub_arr['title'] = i.name
+                        event_sub_arr['start'] = start_date
+                        event_sub_arr['end'] = end_date
+                        event_arr.append(event_sub_arr)
+
+        else:
+            messages.warning(request, "Unable to get ID")
+            print("Unable to get PK")
+            return redirect("drop_calendar:calender_view")
 
         context = {
             "event_data": json.dumps(event_arr),
-            "form": ScheduleEventForm,
-            "events": GroupOrClass,
             "event": query,
+            "form": ScheduleEventForm(instance=data_set),
+            "events": GroupOrClass
         }
 
         return render(request, self.template_name, context)
 
+    def post(self, request, *args, **kwargs):
+        form = ScheduleEventForm(request.POST)
+        if form.is_valid():
+            save_form = form.save(commit=False)
+            # save_form.created_user = self.request.user
+            save_form.save()
+            messages.success(request, "Successfully Updated")
+            logger.debug("Successfully Updated")
+            return redirect("drop_calendar:calender_view")
+        else:
+            print(form.errors)
+            messages.warning(request, "Unable to Save Data")
+            logger.debug(request,"Unable to Save Data")
+            return redirect("drop_calendar:calender_view")
+
+
+# def ScheduleEventUpdate(request, pk):
+#     template_name = "drop_calendar/calendar_update.html"
+#     model = ScheduleEvent
+#     data_set = model.objects.get(
+#         pk=pk
+#     )
+#     form = ScheduleEventForm(request.POST or None, instance=data_set)
+#     if request.POST:
+#         if form.is_valid():
+#             save_form = form.save(commit=False)
+#             # save_form.created_user = self.request.user
+#             save_form.save()
+#
+#     query = model.objects.custom_filter()
+#     event_arr = []
+#     if query:
+#         for i in query:
+#             if i.name and i.start_date and i.end_date:
+#                 event_sub_arr = {'id': i.pk}
+#                 start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
+#                 end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+#                 print(start_date)
+#                 event_sub_arr['title'] = i.name
+#                 event_sub_arr['start'] = start_date
+#                 event_sub_arr['end'] = end_date
+#                 event_arr.append(event_sub_arr)
+#
+#     context = {
+#         "event_data": json.dumps(event_arr),
+#         "event": query,
+#         "form": form,
+#         "events": GroupOrClass
+#     }
+#
+#     return render(request, template_name, context)
 
 
 def event(request):
@@ -150,7 +223,7 @@ def update(request):
     return JsonResponse(data)
 
 
-def ScheduleEventDeleteView(request):
+def schedule_event_delete_view(request):
     try:
         ScheduleEvent.objects.filter(
             pk=request.GET.get('pk')

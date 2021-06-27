@@ -13,6 +13,6 @@ urlpatterns = [
     path('', views.CalenderIndexPage.as_view(), name='calender_view'),
     url('^calendar', views.calendar, name='calendar'),
     url('^add_event$', views.add_event, name='add_event'),
-    url('^update$', views.update, name='update'),
-    path('event/delete/', views.ScheduleEventDeleteView, name='event_delete'),
+    path('event/<int:pk>/update/', views.ScheduleEventUpdate.as_view(), name='event_update'),
+    path('event/delete/', views.schedule_event_delete_view, name='event_delete'),
     ]

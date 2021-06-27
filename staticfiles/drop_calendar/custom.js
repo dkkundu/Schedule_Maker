@@ -22,8 +22,4 @@ $( "#DeleteEventModalClose" ).click(function() {
   $("#DeleteEventModal").css("display","none");
 });
 
-$( "#DeleteEventModalclose2" ).click(function() {
-  $("#DeleteEventModal").css("display","none");
-});
-
 
