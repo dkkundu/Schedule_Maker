@@ -14,5 +14,5 @@ urlpatterns = [
     url('^calendar', views.calendar, name='calendar'),
     url('^add_event$', views.add_event, name='add_event'),
     url('^update$', views.update, name='update'),
-    url('^remove', views.remove, name='remove'),
+    path('event/delete/', views.ScheduleEventDeleteView, name='event_delete'),
     ]

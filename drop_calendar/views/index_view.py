@@ -1,12 +1,18 @@
 import json
 import logging
-from django.views.generic import  View
+
+from django.urls import reverse_lazy
+from django.views.generic import View
 from drop_calendar.models import ScheduleEvent, Events
 from drop_calendar.forms import GroupOrClass, ScheduleEventForm
 import datetime
+from django.contrib.auth.mixins import (
+    UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin
+)
 from django.contrib import messages
-from django.shortcuts import HttpResponse, render
-from django.http import JsonResponse
+from django.shortcuts import HttpResponse, render, redirect
+from django.http import JsonResponse, HttpResponseRedirect
+
 logger = logging.getLogger(__name__)
 
 
@@ -144,9 +150,16 @@ def update(request):
     return JsonResponse(data)
 
 
-def remove(request):
-    id = request.GET.get("id", None)
-    event = Events.objects.get(id=id)
-    event.delete()
-    data = {}
-    return JsonResponse(data)
+def ScheduleEventDeleteView(request):
+    try:
+        ScheduleEvent.objects.filter(
+            pk=request.GET.get('pk')
+        ).update(is_deleted=True)
+    except Exception as ex:
+        messages.warning(request, "Unable to Delete")
+        logger.debug(request, f"Unable to Delete {ex}")
+        return reverse_lazy("drop_calendar:calender_view")
+
+    messages.success(request, "Successfully Deleted")
+    logger.debug("Successfully Deleted")
+    return redirect("drop_calendar:calender_view")

@@ -90,8 +90,8 @@
 
                             </div>
                             <div class="modal-footer">
-                                <button id="DeleteEventModalclose2" type="button" class="btn btn-danger">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button id="DeleteEventModalclose2" type="button" class="btn btn-primary">Edit Event</button>
+                                <a id="id_event_delete"  href="#" type="button" class="btn btn-danger">Delete Event</a>
                             </div>
                     </div>
                 </div>
@@ -112,22 +112,15 @@
 <script src="{% static 'drop_calendar/calender/main.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
-
+<script src="{% static 'drop_calendar/custom.js' %}"></script>
 <script>
-      $(document).ready(function() {
-        	$.datetimepicker.setLocale('pt-BR');
-       	$('#id_start_date').datetimepicker({
-       	 format:'Y-m-d H:i',
-       	});
-      });
-
-      $(document).ready(function() {
-        	$.datetimepicker.setLocale('pt-BR');
-       	$('#id_end_date').datetimepicker({
-       	     format:'Y-m-d H:i',
-       	});
-      });
-
+    //Event Delete URl
+function getEventDeleteUrl(pk){
+    $("#id_event_delete").attr("href", '');
+    var url ="{% url 'drop_calendar:event_delete' %}?";
+        url = url+"&pk="+pk;
+        $("#id_event_delete").attr("href", url);
+}
 </script>
 
 <script>
@@ -171,6 +164,8 @@
             $("#event_id_name").text(info.event.title)
             $("#event_id_start").text(formatDate(info.event.start))
             $("#event_id_end").text(formatDate(info.event.end))
+
+            getEventDeleteUrl(info.event.id)
             modal.style.display = 'block'
             calendar.unselect()
 
