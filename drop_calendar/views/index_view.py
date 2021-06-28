@@ -1,24 +1,31 @@
 import json
 import logging
-
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
 from drop_calendar.models import ScheduleEvent, Events
 from drop_calendar.forms import GroupOrClass, ScheduleEventForm
-import datetime
 from django.contrib.auth.mixins import (
     UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin
 )
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import HttpResponse, render, redirect
-from django.http import JsonResponse, HttpResponseRedirect
-
+from django.shortcuts import render, redirect
 logger = logging.getLogger(__name__)
 
 
-class CalenderIndexPage(View):
+class CalenderIndexPage(
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+    View
+):
     template_name = "drop_calendar/calendar.html"
     model = ScheduleEvent
+    permission_required = "drop_calendar.add_scheduleevent"
+
+    def test_func(self):
+        """Tests if the user is active"""
+        return self.request.user.is_active  # any active user
 
     def get(self, request, **kwargs):
         query = self.model.objects.custom_filter()
@@ -47,7 +54,7 @@ class CalenderIndexPage(View):
         form = ScheduleEventForm(request.POST)
         if form.is_valid():
             save_form = form.save(commit=False)
-            # save_form.created_user = self.request.user
+            save_form.created_user = self.request.user
             save_form.save()
             messages.success(request, "Successfully Updated")
             logger.debug("Successfully Updated")
@@ -59,10 +66,19 @@ class CalenderIndexPage(View):
             return redirect("drop_calendar:calender_view")
 
 
-class ScheduleEventUpdate(UpdateView):
+class ScheduleEventUpdate(
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+    UpdateView
+):
     template_name = "drop_calendar/calendar_update.html"
     model = ScheduleEvent
     form_class = ScheduleEventForm
+
+    def test_func(self):
+        """Tests if the user is active"""
+        return self.request.user.is_active  # any active user
 
     def get_context_data(self, **kwargs):
         kwargs = super(ScheduleEventUpdate, self).get_context_data()
@@ -89,7 +105,7 @@ class ScheduleEventUpdate(UpdateView):
 
         if form.is_valid():
             save_form = form.save(commit=False)
-            # save_form.created_user = self.request.user
+            save_form.created_user = self.request.user
             save_form.save()
 
         else:
@@ -106,6 +122,7 @@ class ScheduleEventUpdate(UpdateView):
         return reverse_lazy("drop_calendar:calender_view")
 
 
+@login_required
 def schedule_event_delete_view(request):
     try:
         ScheduleEvent.objects.filter(

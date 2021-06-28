@@ -7,6 +7,8 @@
 {% block style %}
   <link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet" />
   <link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+
 
 <style>
     .bootstrap-datetimepicker-widget table td a[data-action="close"]>span:hover {
@@ -15,11 +17,24 @@
   color: #fff;
 }
 .xdsoft_calendar {
-    background: #d82121;
+    background: #12ff24;
 }
 span.asteriskField {
     color: #f00;
     font-size: 17px;
+}
+.xdsoft_datetimepicker.xdsoft_noselect.xdsoft_ {
+    left: 46% !important;
+    background: #00968852;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td, .xdsoft_datetimepicker .xdsoft_calendar th {
+    background: #00ccb9 !important;
+    color: #000000 !important;
+}
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box>div>div {
+    background: #00ccb9 !important;
+    color: #000000 !important;
 }
 </style>
 
@@ -113,6 +128,7 @@ span.asteriskField {
 <script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
 <script src="{% static 'drop_calendar/custom.js' %}"></script>
+
 <script>
     //Event Delete URl
 function getEventUpdateUrl(pk){
@@ -134,17 +150,6 @@ function getEventDeleteUrl(pk){
         var calendarEl = document.getElementById('calendar');
         var today = new Date();
 
-        function GetTimeFormat(dt) {
-            return `${
-                dt.getHours().toString().padStart(2, '0')}:${
-                dt.getMinutes().toString().padStart(2, '0')}:${
-                dt.getSeconds().toString().padStart(2, '0')}
-                (${
-                (dt.getMonth()+1).toString().padStart(2, '0')}/${
-                dt.getDate().toString().padStart(2, '0')}/${
-                dt.getFullYear().toString().padStart(4, '0')})`
-        };
-
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
           headerToolbar: {
@@ -156,28 +161,25 @@ function getEventDeleteUrl(pk){
 
           selectable: true,
           selectMirror: true,
-          select: function(arg) {
-            console.log('clicked')
-            var modal = document.getElementById('eventModal')
+          dateClick: function(info) {
+          var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
+            date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            $("#id_start_date").val(date_input)
+            console.log(date_input)
             calendar.unselect()
           },
 
 
           eventClick: function(info) {
             var modal = document.getElementById('DeleteEventModal')
-
             getEventDeleteUrl(info.event.id)
             getEventUpdateUrl(info.event.id)
             modal.style.display = 'block'
             calendar.unselect()
             $("#event_id_name").text(info.event.title)
-            if (GetTimeFormat(info.event.start)){
-                $("#event_id_start").text(GetTimeFormat(info.event.start))
-            }
-            if (GetTimeFormat(info.event.end)){
-                $("#event_id_end").text(GetTimeFormat(info.event.end))
-            }
+            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
 
           },
 
