@@ -86,9 +86,9 @@ span.asteriskField {
                             </button>
                         </div>
                             <div class="modal-body">
-                                <h2>Class/Event name : <span id="event_id_name"></span></h2>
-                                <h4>Class/Event Start Date : <span id="event_id_start"></span></h4>
-                                <h4>Class/Event End Date : <span id="event_id_end"></span></h4>
+                                <h2>Event : <span id="event_id_name"></span></h2>
+                                <p>Start Date : <span id="event_id_start"></span></p>
+                                <p>End Date : <span id="event_id_end"></span></p>
 
                             </div>
                             <div class="modal-footer">
@@ -134,10 +134,15 @@ function getEventDeleteUrl(pk){
         var calendarEl = document.getElementById('calendar');
         var today = new Date();
 
-        var formatDate  =  function getSQLDate(date) {
-        var time = date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()
-        +" "+date.getHours()+":"+getMinutes()+":"+getSeconds()
-        return time
+        function GetTimeFormat(dt) {
+            return `${
+                dt.getHours().toString().padStart(2, '0')}:${
+                dt.getMinutes().toString().padStart(2, '0')}:${
+                dt.getSeconds().toString().padStart(2, '0')}
+                (${
+                (dt.getMonth()+1).toString().padStart(2, '0')}/${
+                dt.getDate().toString().padStart(2, '0')}/${
+                dt.getFullYear().toString().padStart(4, '0')})`
         };
 
 
@@ -161,14 +166,18 @@ function getEventDeleteUrl(pk){
 
           eventClick: function(info) {
             var modal = document.getElementById('DeleteEventModal')
-            $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(info.event.start)
-            $("#event_id_end").text(info.event.end)
 
             getEventDeleteUrl(info.event.id)
             getEventUpdateUrl(info.event.id)
             modal.style.display = 'block'
             calendar.unselect()
+            $("#event_id_name").text(info.event.title)
+            if (GetTimeFormat(info.event.start)){
+                $("#event_id_start").text(GetTimeFormat(info.event.start))
+            }
+            if (GetTimeFormat(info.event.end)){
+                $("#event_id_end").text(GetTimeFormat(info.event.end))
+            }
 
           },
 
