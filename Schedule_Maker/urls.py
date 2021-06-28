@@ -20,10 +20,11 @@ from django.contrib import admin
 from django.urls import include, path
 # CORE IMPORTS
 from Core.views import IndexView, SignupView, LoginView
+from drop_calendar.views import CalendarIndex
 
 urlpatterns = [
     # index url ---------------------------------------------------------------
-    path('', IndexView.as_view(), name='index'),
+    path('', CalendarIndex.as_view(), name='calendar_index'),
 
     # prometheus url ----------------------------------------------------------
     path('', include('django_prometheus.urls')),
