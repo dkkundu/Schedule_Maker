@@ -11,8 +11,10 @@ DK
 
 {% block content %}
 <div class="row">
-    <div class="col-md-4">
-        <div class="tile">
+
+        <div class="col-md-4">
+             <a href="{% url 'drop_calendar:calender_view' %}">
+                 <div class="tile">
             <h3 class="tile-title">General Schedule</h3>
             <table class="table">
                 <thead>
@@ -45,7 +47,10 @@ DK
                 </tbody>
             </table>
         </div>
-    </div>
+             </a>
+        </div>
+
+
     <div class="col-md-4">
         <div class="tile">
             <h3 class="tile-title">Class Schedule</h3>
@@ -81,6 +86,7 @@ DK
             </table>
         </div>
     </div>
+
     <div class="col-md-4">
         <div class="tile">
             <h3 class="tile-title">Schedule Event Type</h3>
@@ -116,6 +122,7 @@ DK
             </table>
         </div>
     </div>
+
     <div class="col-md-4">
         <div class="tile">
             <h3 class="tile-title">View General Schedule</h3>
@@ -151,6 +158,7 @@ DK
             </table>
         </div>
     </div>
+
     <div class="col-md-4">
         <div class="tile">
             <h3 class="tile-title">View Class Schedule</h3>
@@ -186,6 +194,7 @@ DK
             </table>
         </div>
     </div>
+
     <div class="col-md-4">
         <div class="tile">
             <h3 class="tile-title">Last Schedule List</h3>
