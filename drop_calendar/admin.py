@@ -10,6 +10,20 @@ class EventTypeAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(models.AdmissionClass)
+class AdmissionClassAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+    ]
+
+
+@admin.register(models.ClassSanction)
+class ClassSanctionAdmin(admin.ModelAdmin):
+    list_display = [
+        'name',
+    ]
+
+
 @admin.register(models.ScheduleEvent)
 class ScheduleEventAdmin(admin.ModelAdmin):
     list_display = [

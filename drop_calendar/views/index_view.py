@@ -4,8 +4,16 @@ import logging
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
-from drop_calendar.models import ScheduleEvent, Events
-from drop_calendar.forms import GroupOrClass, ScheduleEventForm
+from drop_calendar.models import (
+    ScheduleEvent,
+    Events,
+    ClassScheduleEvent
+)
+from drop_calendar.forms import (
+    GroupOrClass,
+    ScheduleEventForm,
+    ClassScheduleEventForm,
+)
 from django.contrib.auth.mixins import (
     UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin
 )
@@ -82,7 +90,7 @@ class ClassScheduleEventCalender(
     View
 ):
     template_name = "drop_calendar/class_calendar.html"
-    model = ScheduleEvent
+    model = ClassScheduleEvent
     permission_required = "drop_calendar.add_scheduleevent"
 
     def test_func(self):
@@ -108,7 +116,7 @@ class ClassScheduleEventCalender(
         context = {
             "event_data": json.dumps(event_arr),
             "event": query.filter(start_date__range=(today_min, today_max)),
-            "form": ScheduleEventForm,
+            "form": ClassScheduleEventForm,
             "filter": EventTimeFilter,
             "events": GroupOrClass
         }
@@ -116,7 +124,7 @@ class ClassScheduleEventCalender(
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        form = ScheduleEventForm(request.POST)
+        form = ClassScheduleEventForm(request.POST)
         if form.is_valid():
             save_form = form.save(commit=False)
             save_form.created_user = self.request.user

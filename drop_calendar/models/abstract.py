@@ -52,3 +52,33 @@ class AbstractBaseFields(models.Model):
 
     class Meta:
         abstract = True
+
+
+class AdmissionClass(models.Model):
+    name = models.CharField(
+        _('Class Name'), max_length=20, unique=True,
+        help_text="Class Name in Text. (ex: One)"
+    )
+    code = models.CharField(
+        _('Class Code'), max_length=10, unique=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ClassSanction(models.Model):
+    name = models.CharField(
+        _('Class Name'), max_length=20, unique=True,
+        help_text="Class Name in Text. (ex: One)"
+    )
+    code = models.CharField(
+        _('Class Code'), max_length=10, unique=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
