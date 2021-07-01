@@ -30,3 +30,11 @@ class ScheduleEventAdmin(admin.ModelAdmin):
         'name', 'start_date', 'end_date', 'event_type'
     ]
 
+
+@admin.register(models.ClassScheduleEvent)
+class ClassScheduleEventAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'start_date', 'end_date', 'event_type',
+        'schedule_class', 'class_sanction'
+    ]
+

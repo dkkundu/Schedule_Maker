@@ -101,7 +101,7 @@ span.asteriskField {
                             </button>
                         </div>
                             <div class="modal-body">
-                                <h2>Event : <span id="event_id_name"></span></h2>
+                                <h2>Subject : <span id="event_id_name"></span></h2>
                                 <p>Start Date : <span id="event_id_start"></span></p>
                                 <p>End Date : <span id="event_id_end"></span></p>
 
@@ -133,13 +133,13 @@ span.asteriskField {
     //Event Delete URl
 function getEventUpdateUrl(pk){
     $("#id_event_edit").attr("href", '');
-    var url ="{% url 'drop_calendar:event_update' pk=0 %}".replace(/0/, pk.toString());
+    var url ="{% url 'drop_calendar:class_event_update' pk=0 %}".replace(/0/, pk.toString());
         $("#id_event_edit").attr("href", url);
 }
 
 function getEventDeleteUrl(pk){
     $("#id_event_delete").attr("href", '');
-    var url ="{% url 'drop_calendar:event_delete' %}?";
+    var url ="{% url 'drop_calendar:class_event_delete' %}?";
         url = url+"&pk="+pk;
         $("#id_event_delete").attr("href", url);
 }
@@ -159,18 +159,18 @@ function getEventDeleteUrl(pk){
             center: 'title',
             right: 'timeGridWeek,list'
           },
-          firstDay:6,
-          initialDate: today,
+          initialDate: new Date(),
           initialView: 'timeGridWeek',
-
 
           selectable: true,
           selectMirror: true,
           dateClick: function(info) {
           var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
-            date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
-            $("#id_start_date").val(date_input)
+            start_date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            end_date_input = moment(info.dateStr).add(30, 'minutes').format('YYYY-MM-DD h:mm');
+            $("#id_start_date").val(start_date_input)
+            $("#id_end_date").val(end_date_input)
             console.log(date_input)
             calendar.unselect()
           },

@@ -2,7 +2,9 @@ from .index_view import (
     CalenderIndexPage,
     schedule_event_delete_view,
     ScheduleEventUpdate,
-    ClassScheduleEventCalender
+    ClassScheduleEventCalender,
+    ClassScheduleEventUpdate,
+    class_schedule_event_delete_view
 )
 from .calendar_index import CalendarIndex
 
@@ -11,5 +13,7 @@ __all__ = [
     CalenderIndexPage,
     schedule_event_delete_view,
     ScheduleEventUpdate,
-    ClassScheduleEventCalender
+    ClassScheduleEventCalender,
+    ClassScheduleEventUpdate,
+    class_schedule_event_delete_view
 ]

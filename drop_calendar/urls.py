@@ -14,4 +14,7 @@ urlpatterns = [
     path('event/<int:pk>/update/', views.ScheduleEventUpdate.as_view(), name='event_update'),
     path('event/delete/', views.schedule_event_delete_view, name='event_delete'),
     path('add/class/schedule/', views.ClassScheduleEventCalender.as_view(), name='class_schedule'),
+    path('class/event/<int:pk>/update/', views.ClassScheduleEventUpdate.as_view(), name='class_event_update'),
+    path('class/event/delete/', views.class_schedule_event_delete_view, name='class_event_delete'),
+
     ]
