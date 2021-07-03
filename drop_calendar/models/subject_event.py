@@ -55,13 +55,13 @@ class ClassScheduleEvent(AbstractBaseFields):
         blank=True, null=True, related_name="class_teacher"
     )
     name = models.CharField(
-        _("Subject"), max_length=255, null=True, blank=True
+        _("Subject"), max_length=255, null=True
     )
     start_date = models.DateTimeField(
-        _("Start Time"), null=True, blank=True
+        _("Start Date"), null=True, blank=True
     )
     end_date = models.DateTimeField(
-        _("End Time"), null=True, blank=True
+        _("End Date"), null=True, blank=True
     )
     schedule_class = models.ForeignKey(
         AdmissionClass, on_delete=models.SET_NULL,
@@ -80,9 +80,6 @@ class ClassScheduleEvent(AbstractBaseFields):
         blank=True, null=True
     )
     objects = ClassScheduleEventManager()
-
-    class Meta:
-        unique_together = ('schedule_class', 'class_sanction',)
 
     def __str__(self):
         return str(self.name)

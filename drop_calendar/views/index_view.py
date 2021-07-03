@@ -9,6 +9,8 @@ from drop_calendar.models import (
     Events,
     ClassScheduleEvent
 )
+from django.utils import timezone
+
 from drop_calendar.forms import (
     GroupOrClass,
     ScheduleEventForm,
@@ -50,8 +52,10 @@ class CalenderIndexPage(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    print('start_date', start_date)
+                    end_date = i.end_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    print('end_date', end_date)
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
@@ -105,8 +109,8 @@ class ScheduleEventUpdate(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    end_date = i.end_date.date().strftime("%Y-%m-%dT%H:%M:%S")
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
@@ -180,8 +184,11 @@ class ClassScheduleEventCalender(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+                    print('i.start_date----', i.start_date)
+                    print('i.start_date formet --------------', start_date)
+                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
@@ -234,13 +241,14 @@ class ClassScheduleEventUpdate(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%SZ")
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
                     event_arr.append(event_sub_arr)
 
+                    print("--------", json.dumps(event_arr))
         kwargs["event_data"] = json.dumps(event_arr)
         kwargs["event"] = query
         kwargs["events"] = GroupOrClass

@@ -154,6 +154,7 @@ function getEventDeleteUrl(pk){
 
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+          timeZone: 'local',
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
@@ -161,21 +162,16 @@ function getEventDeleteUrl(pk){
           },
           initialDate: new Date(),
           initialView: 'timeGridWeek',
-
           selectable: true,
           selectMirror: true,
           dateClick: function(info) {
           var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
             start_date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
-            end_date_input = moment(info.dateStr).add(30, 'minutes').format('YYYY-MM-DD h:mm');
             $("#id_start_date").val(start_date_input)
-            $("#id_end_date").val(end_date_input)
             console.log(date_input)
             calendar.unselect()
           },
-
-
           eventClick: function(info) {
             var modal = document.getElementById('DeleteEventModal')
             getEventDeleteUrl(info.event.id)
@@ -183,9 +179,8 @@ function getEventDeleteUrl(pk){
             modal.style.display = 'block'
             calendar.unselect()
             $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
-            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
-
+            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss, MMMM Do YYYY'))
           },
 
           editable: true,
