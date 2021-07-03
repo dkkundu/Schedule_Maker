@@ -168,7 +168,9 @@ function getEventDeleteUrl(pk){
           var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
             start_date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            end_date_input = moment(info.dateStr).add(60, 'minutes').format('YYYY-MM-DD h:mm');
             $("#id_start_date").val(start_date_input)
+            $("#id_end_date").val(end_date_input)
             console.log(date_input)
             calendar.unselect()
           },
