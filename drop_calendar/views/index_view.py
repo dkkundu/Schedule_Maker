@@ -52,9 +52,9 @@ class CalenderIndexPage(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
                     print('start_date', start_date)
-                    end_date = i.end_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%SZ")
                     print('end_date', end_date)
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
@@ -109,8 +109,8 @@ class ScheduleEventUpdate(
             for i in query:
                 if i.name and i.start_date and i.end_date:
                     event_sub_arr = {'id': i.pk}
-                    start_date = i.start_date.date().strftime("%Y-%m-%dT%H:%M:%S")
-                    end_date = i.end_date.date().strftime("%Y-%m-%dT%H:%M:%S")
+                    start_date = i.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+                    end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%SZ")
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
@@ -178,7 +178,7 @@ class ClassScheduleEventCalender(
     def get(self, request, **kwargs):
         today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
         today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
-        query = self.model.objects.custom_filter()
+        query = self.model.objects.custom_filter().filter(created_at__range=(today_min, today_max))
         event_arr = []
         if query:
             for i in query:
