@@ -95,7 +95,7 @@ span.asteriskField {
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-primary">
-                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle">DELETE SUBJECT OR EVENT</h5>
+                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle"> SUBJECT OR EVENT DETAILS</h5>
                             <button id="DeleteEventModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -165,7 +165,9 @@ function getEventDeleteUrl(pk){
           var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
             date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            end_time = moment(info.dateStr).add(120, 'minutes').format('YYYY-MM-DD h:mm');
             $("#id_start_date").val(date_input)
+            $("#id_end_date").val(end_time)
             console.log(date_input)
             calendar.unselect()
           },

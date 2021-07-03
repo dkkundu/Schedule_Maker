@@ -196,7 +196,7 @@ class ClassScheduleEventCalender(
 
         context = {
             "event_data": json.dumps(event_arr),
-            "event": query.filter(start_date__range=(today_min, today_max)),
+            "event": query.filter(created_at__range=(today_min, today_max)),
             "form": ClassScheduleEventForm,
             "filter": EventTimeFilter,
             "events": GroupOrClass

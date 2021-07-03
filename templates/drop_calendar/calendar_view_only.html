@@ -95,21 +95,18 @@ span.asteriskField {
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-primary">
-                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle">SUBJECT OR EVENT DETAILS</h5>
+                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle"> SUBJECT OR EVENT DETAILS</h5>
                             <button id="DeleteEventModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                             <div class="modal-body">
-                                <h2>Subject : <span id="event_id_name"></span></h2>
+                                <h2>Event : <span id="event_id_name"></span></h2>
                                 <p>Start Date : <span id="event_id_start"></span></p>
                                 <p>End Date : <span id="event_id_end"></span></p>
 
                             </div>
-                            <div class="modal-footer">
-                                <a id="id_event_edit" type="button" href="#" class="btn btn-primary">Edit Event</a>
-                                <a id="id_event_delete"  href="#" type="button" class="btn btn-danger">Delete Event</a>
-                            </div>
+
                     </div>
                 </div>
             </div>
@@ -133,47 +130,35 @@ span.asteriskField {
     //Event Delete URl
 function getEventUpdateUrl(pk){
     $("#id_event_edit").attr("href", '');
-    var url ="{% url 'drop_calendar:class_event_update' pk=0 %}".replace(/0/, pk.toString());
+    var url ="{% url 'drop_calendar:event_update' pk=0 %}".replace(/0/, pk.toString());
         $("#id_event_edit").attr("href", url);
 }
 
 function getEventDeleteUrl(pk){
     $("#id_event_delete").attr("href", '');
-    var url ="{% url 'drop_calendar:class_event_delete' %}?";
+    var url ="{% url 'drop_calendar:event_delete' %}?";
         url = url+"&pk="+pk;
         $("#id_event_delete").attr("href", url);
 }
-
 </script>
 
 <script>
        document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-
         var today = new Date();
 
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-          timeZone: 'local',
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'timeGridWeek,list'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
           },
-          initialDate: new Date(),
-          initialView: 'timeGridWeek',
-          selectable: true,
+          initialDate: today,
+          editable:false,
+          selectable: false,
           selectMirror: true,
-          dateClick: function(info) {
-          var modal = document.getElementById('eventModal')
-            modal.style.display = 'block'
-            start_date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
-            end_date_input = moment(info.dateStr).add(60, 'minutes').format('YYYY-MM-DD h:mm');
-            $("#id_start_date").val(start_date_input)
-            $("#id_end_date").val(end_date_input)
-            console.log(date_input)
-            calendar.unselect()
-          },
+
           eventClick: function(info) {
             var modal = document.getElementById('DeleteEventModal')
             getEventDeleteUrl(info.event.id)
@@ -181,11 +166,10 @@ function getEventDeleteUrl(pk){
             modal.style.display = 'block'
             calendar.unselect()
             $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss'))
-            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss'))
-          },
+            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
 
-          editable: true,
+          },
           dayMaxEvents: true, // allow "more" link when too many events
           events: {{ event_data|safe }},
         });
@@ -202,8 +186,6 @@ function getEventDeleteUrl(pk){
         const eventModal = document.getElementById('eventModal')
         eventModal.style.display = 'none';
       });
-
-
 </script>
 {% endblock %}
 
