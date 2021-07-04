@@ -1,0 +1,80 @@
+{% extends 'drop_calendar/base.html' %}
+{% load static %}
+{% block title %}
+{% load crispy_forms_tags %}
+DK
+{% endblock title %}
+{% block style %}
+<link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet"/>
+<link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock style %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile row">
+            <div class="col-md-3">
+                <div id="external-events">
+                    <h4 class="mb-4">Events Filter</h4>
+                    <div class="fc-event">
+                        {{ filter.schedule_class }}
+                    </div>
+                    <div class="fc-event">
+                        {{ filter.class_sanction }}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="tile">
+                    <h3 class="tile-title">Class Schedule List</h3>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Class</th>
+                            <th>Sanction</th>
+                            <th>Event Type</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                            <td>1</td>
+                            <td>{{object.schedule_class}}</td>
+                            <td>{{object.class_sanction}}</td>
+                            <td>@DK</td>
+                            <td>
+                                <a class="btn btn-info"
+                                   href="{% url 'drop_calendar:class_schedule_view' pk=object.pk %}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+
+                        </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>
+</div>
+{% endblock %}
+
+
+{% block extra_ja %}
+{% endblock %}
+
+
+

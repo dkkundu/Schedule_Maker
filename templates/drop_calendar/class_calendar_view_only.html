@@ -8,33 +8,35 @@
   <link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet" />
   <link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
-  <style>
-        .bootstrap-datetimepicker-widget table td a[data-action="close"]>span:hover {
-      /* Set her your custom color */
-      background-color: #337ab7;
-      color: #fff;
-    }
-    .xdsoft_calendar {
-        background: #12ff24;
-    }
-    span.asteriskField {
-        color: #f00;
-        font-size: 17px;
-    }
-    .xdsoft_datetimepicker.xdsoft_noselect.xdsoft_ {
-        left: 46% !important;
-        background: #00968852;
-    }
 
-    .xdsoft_datetimepicker .xdsoft_calendar td, .xdsoft_datetimepicker .xdsoft_calendar th {
-        background: #00ccb9 !important;
-        color: #000000 !important;
-    }
-    .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box>div>div {
-        background: #00ccb9 !important;
-        color: #000000 !important;
-    }
-    </style>
+
+<style>
+    .bootstrap-datetimepicker-widget table td a[data-action="close"]>span:hover {
+  /* Set her your custom color */
+  background-color: #337ab7;
+  color: #fff;
+}
+.xdsoft_calendar {
+    background: #12ff24;
+}
+span.asteriskField {
+    color: #f00;
+    font-size: 17px;
+}
+.xdsoft_datetimepicker.xdsoft_noselect.xdsoft_ {
+    left: 46% !important;
+    background: #00968852;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td, .xdsoft_datetimepicker .xdsoft_calendar th {
+    background: #00ccb9 !important;
+    color: #000000 !important;
+}
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box>div>div {
+    background: #00ccb9 !important;
+    color: #000000 !important;
+}
+</style>
 
 {% endblock style %}
 
@@ -60,6 +62,7 @@
             <div class="col-md-9">
                 <div id="calendar"></div>
             </div>
+
 
 
 
@@ -92,62 +95,86 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header bg-primary">
-                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle"> SUBJECT OR EVENT DETAILS</h5>
+                            <h5 class="modal-title text-white" id="DeleteEventModalLongTitle">SUBJECT OR EVENT DETAILS</h5>
                             <button id="DeleteEventModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                             <div class="modal-body">
-                                <h2>Event : <span id="event_id_name"></span></h2>
+                                <h2>Subject : <span id="event_id_name"></span></h2>
                                 <p>Start Date : <span id="event_id_start"></span></p>
                                 <p>End Date : <span id="event_id_end"></span></p>
 
                             </div>
+                            <div class="modal-footer">
+                                <a id="id_event_edit" type="button" href="#" class="btn btn-primary">Edit Event</a>
+                                <a id="id_event_delete"  href="#" type="button" class="btn btn-danger">Delete Event</a>
+                            </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
+
+
         </div>
     </div>
 </div>
 {% endblock %}
+
+
 {% block extra_ja %}
 <script src="{% static 'drop_calendar/calender/main.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
 <script src="{% static 'drop_calendar/custom.js' %}"></script>
+
 <script>
     //Event Delete URl
 function getEventUpdateUrl(pk){
     $("#id_event_edit").attr("href", '');
-    var url ="{% url 'drop_calendar:event_update' pk=0 %}".replace(/0/, pk.toString());
+    var url ="{% url 'drop_calendar:class_event_update' pk=0 %}".replace(/0/, pk.toString());
         $("#id_event_edit").attr("href", url);
 }
 
 function getEventDeleteUrl(pk){
     $("#id_event_delete").attr("href", '');
-    var url ="{% url 'drop_calendar:event_delete' %}?";
+    var url ="{% url 'drop_calendar:class_event_delete' %}?";
         url = url+"&pk="+pk;
         $("#id_event_delete").attr("href", url);
 }
+
 </script>
+
 <script>
        document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var today = new Date();
+
+        var today = new Date("{{ load_date }}");
+        console.log(today);
+
+
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            right: 'timeGridWeek,list'
           },
           initialDate: today,
-          editable:false,
-          selectable: false,
+          initialView: 'timeGridWeek',
+          selectable: true,
           selectMirror: true,
-
+          dateClick: function(info) {
+          var modal = document.getElementById('eventModal')
+            modal.style.display = 'block'
+            start_date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            end_date_input = moment(info.dateStr).add(60, 'minutes').format('YYYY-MM-DD h:mm');
+            $("#id_start_date").val(start_date_input)
+            $("#id_end_date").val(end_date_input)
+            console.log(date_input)
+            calendar.unselect()
+          },
           eventClick: function(info) {
             var modal = document.getElementById('DeleteEventModal')
             getEventDeleteUrl(info.event.id)
@@ -155,10 +182,11 @@ function getEventDeleteUrl(pk){
             modal.style.display = 'block'
             calendar.unselect()
             $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
-            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
-
+            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss'))
+            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss'))
           },
+
+          editable: true,
           dayMaxEvents: true, // allow "more" link when too many events
           events: {{ event_data|safe }},
         });
@@ -175,6 +203,9 @@ function getEventDeleteUrl(pk){
         const eventModal = document.getElementById('eventModal')
         eventModal.style.display = 'none';
       });
+
+
+
 </script>
 {% endblock %}
 

@@ -74,7 +74,7 @@ class ClassScheduleEventCalenderViewOnly(
     UserPassesTestMixin,
     TemplateView
 ):
-    template_name = "drop_calendar/class_calendar.html"
+    template_name = "drop_calendar/class_calendar_view_only.html"
     model = ClassScheduleEvent
     permission_required = "drop_calendar.view_scheduleevent"
 
@@ -83,9 +83,16 @@ class ClassScheduleEventCalenderViewOnly(
         return self.request.user.is_active  # any active user
 
     def get(self, request, **kwargs):
-        today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-        today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
-        query = self.model.objects.custom_filter().filter(created_at__range=(today_min, today_max))
+        quarry_object = self.model.objects.get(
+            pk=self.kwargs['pk']
+        )
+
+        query = self.model.objects.custom_filter().filter(
+            schedule_class=quarry_object.schedule_class,
+            class_sanction=quarry_object.class_sanction
+        )
+
+        print("-----")
         event_arr = []
         if query:
             for i in query:
@@ -95,7 +102,6 @@ class ClassScheduleEventCalenderViewOnly(
                     print('i.start_date----', i.start_date)
                     print('i.start_date formet --------------', start_date)
                     end_date = i.end_date.strftime("%Y-%m-%dT%H:%M:%SZ")
-
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
@@ -103,10 +109,11 @@ class ClassScheduleEventCalenderViewOnly(
 
         context = {
             "event_data": json.dumps(event_arr),
-            "event": query.filter(created_at__range=(today_min, today_max)),
+            "event": query,
             "form": ClassScheduleEventForm,
             "filter": EventTimeFilter,
-            "events": GroupOrClass
+            "events": GroupOrClass,
+            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
         }
 
         return render(request, self.template_name, context)
