@@ -161,6 +161,7 @@ function getEventDeleteUrl(pk){
 
           selectable: true,
           selectMirror: true,
+
           dateClick: function(info) {
           var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
@@ -179,9 +180,14 @@ function getEventDeleteUrl(pk){
             getEventUpdateUrl(info.event.id)
             modal.style.display = 'block'
             calendar.unselect()
+
+            var start = info.event.start
+            var end_same_date = info.event.end_same_date
+            var end = info.event.end || end_same_date
+
             $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
-            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_start").text(moment(start).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(end).format('h:mm:ss a, MMMM Do YYYY'))
 
           },
 

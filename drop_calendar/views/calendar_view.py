@@ -59,6 +59,7 @@ class CalenderIndexPage(
                     event_sub_arr['title'] = i.name
                     event_sub_arr['start'] = start_date
                     event_sub_arr['end'] = end_date
+                    event_sub_arr['end_same_date'] = end_date
                     event_arr.append(event_sub_arr)
 
         context = {
