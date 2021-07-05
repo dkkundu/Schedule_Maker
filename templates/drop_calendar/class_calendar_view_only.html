@@ -47,7 +47,10 @@ span.asteriskField {
         <div class="tile row">
             <div class="col-md-3">
                 <div id="external-events">
-                    <h4 class="mb-4">Today's Events</h4>
+                   <h4 class="mb-4">Schedule Class : {% if schedule_class %} {{  schedule_class }} {% endif %}
+                        {% if class_sanction %} ( {{ class_sanction }} ) {% endif %}
+
+                    </h4>
                     {% for dbj in event %}
 
                     <div class="fc-event">
@@ -133,13 +136,13 @@ span.asteriskField {
     //Event Delete URl
 function getEventUpdateUrl(pk){
     $("#id_event_edit").attr("href", '');
-    var url ="{% url 'drop_calendar:class_event_update' pk=0 %}".replace(/0/, pk.toString());
+    var url ="{% url 'drop_calendar:class_schedule_update' pk=0 %}".replace(/0/, pk.toString());
         $("#id_event_edit").attr("href", url);
 }
 
 function getEventDeleteUrl(pk){
     $("#id_event_delete").attr("href", '');
-    var url ="{% url 'drop_calendar:class_event_delete' %}?";
+    var url ="{% url 'drop_calendar:class_sanction_event_delete' %}?";
         url = url+"&pk="+pk;
         $("#id_event_delete").attr("href", url);
 }

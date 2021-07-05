@@ -4,6 +4,8 @@
 {% load crispy_forms_tags %}
 DK
 {% endblock title %}
+
+
 {% block style %}
 <link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet"/>
 <link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet"/>
@@ -49,7 +51,7 @@ DK
                             <td>1</td>
                             <td>{{object.schedule_class}}</td>
                             <td>{{object.class_sanction}}</td>
-                            <td>@DK</td>
+                            <td>{{object.event_type}}</td>
                             <td>
                                 <a class="btn btn-info"
                                    href="{% url 'drop_calendar:class_schedule_view' pk=object.pk %}">
@@ -63,6 +65,10 @@ DK
                         </tbody>
                     </table>
                 </div>
+
+                <div class="margin-auto">
+                 <img class="search_image" src="{% static 'drop_calendar/images/search.png' %}" >
+                 </div>
             </div>
 
 

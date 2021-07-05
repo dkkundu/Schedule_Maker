@@ -96,6 +96,8 @@ class ScheduleEventUpdate(
     template_name = "drop_calendar/calendar_update.html"
     model = ScheduleEvent
     form_class = ScheduleEventForm
+    permission_required = "drop_calendar.add_scheduleevent"
+
 
     def test_func(self):
         """Tests if the user is active"""
@@ -169,7 +171,7 @@ class ClassScheduleEventCalender(
 ):
     template_name = "drop_calendar/class_calendar.html"
     model = ClassScheduleEvent
-    permission_required = "drop_calendar.add_scheduleevent"
+    permission_required = "drop_calendar.add_classscheduleevent"
 
     def test_func(self):
         """Tests if the user is active"""
@@ -256,7 +258,6 @@ class ClassScheduleEventUpdate(
         return kwargs
 
     def form_valid(self, form, *args, **kwargs):
-
         if form.is_valid():
             save_form = form.save(commit=False)
             save_form.updated_user = self.request.user
@@ -285,7 +286,7 @@ def class_schedule_event_delete_view(request):
     except Exception as ex:
         messages.warning(request, "Unable to Delete")
         logger.debug(request, f"Unable to Delete {ex}")
-        return reverse_lazy("drop_calendar:class_schedule")
+        return redirect("drop_calendar:class_schedule")
 
     messages.success(request, "Successfully Deleted")
     logger.debug("Successfully Deleted")

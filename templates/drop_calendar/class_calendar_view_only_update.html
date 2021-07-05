@@ -7,6 +7,8 @@
 {% block style %}
   <link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet" />
   <link href="{% static 'drop_calendar/jquery.datetimepicker.min.css' %}" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js"></script>
+
 
 <style>
     .bootstrap-datetimepicker-widget table td a[data-action="close"]>span:hover {
@@ -15,11 +17,24 @@
   color: #fff;
 }
 .xdsoft_calendar {
-    background: #d82121;
+    background: #12ff24;
 }
 span.asteriskField {
     color: #f00;
     font-size: 17px;
+}
+.xdsoft_datetimepicker.xdsoft_noselect.xdsoft_ {
+    left: 46% !important;
+    background: #00968852;
+}
+
+.xdsoft_datetimepicker .xdsoft_calendar td, .xdsoft_datetimepicker .xdsoft_calendar th {
+    background: #00ccb9 !important;
+    color: #000000 !important;
+}
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box>div>div {
+    background: #00ccb9 !important;
+    color: #000000 !important;
 }
 </style>
 
@@ -32,7 +47,10 @@ span.asteriskField {
         <div class="tile row">
             <div class="col-md-3">
                 <div id="external-events">
-                    <h4 class="mb-4">Draggable Events</h4>
+                    <h4 class="mb-4">Schedule Class : {% if schedule_class %} {{  schedule_class }} {% endif %}
+                        {% if class_sanction %} ( {{ class_sanction }} ) {% endif %}
+
+                    </h4>
                     {% for dbj in event %}
 
                     <div class="fc-event">
@@ -66,16 +84,15 @@ span.asteriskField {
                                 {{ form|crispy }}
                             </div>
                             <div class="modal-footer">
-                                <a id="modalClose2" href="{% url 'drop_calendar:calender_view' %}" type="button" class="btn btn-danger">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <a href="{% url 'drop_calendar:class_schedule_view' pk=object.pk %}" id="modalClose2" type="button" class="btn btn-danger">Close</a>
+                                <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-
-
+<!--            delete Modal-->
         </div>
 
 
@@ -91,64 +108,59 @@ span.asteriskField {
 <script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
 <script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
 <script src="{% static 'drop_calendar/custom.js' %}"></script>
+
 <script>
-
-
-function getEventDeleteUrl(pk){
-    $("#id_event_delete").attr("href", '');
-    var url ="{% url 'drop_calendar:event_delete' %}?";
-        url = url+"&pk="+pk;
-        $("#id_event_delete").attr("href", url);
+    //Event Delete URl
+function getEventUpdateUrl(pk){
+    $("#id_event_edit").attr("href", '');
+    var url ="{% url 'drop_calendar:event_update' pk=0 %}".replace(/0/, pk.toString());
+        $("#id_event_edit").attr("href", url);
 }
-$("#eventModal").css("display","block");
+
+  $("#eventModal").css("display","block");
+
 </script>
 
 <script>
+
        document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        var today = new Date();
 
-        var formatDate = function(date) {
-           return date.getDate() + "-"
-           + date.getMonth() + "-"
-           + date.getFullYear() + " "
-           +  ('0' + date.getHours()).slice(-2)
-           + ":" + ('0' + date.getMinutes()).slice(-2)
-           + ":" + ('0' + date.getSeconds()).slice(-2)
-           + ' ' + (date.getHours() < 12 ? 'AM' : 'PM');
-         }
+        var today = new Date();
 
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
           headerToolbar: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+            right: 'timeGridWeek,list'
           },
+          firstDay:6,
           initialDate: today,
+          initialView: 'timeGridWeek',
 
-          navLinks: true, // can click day/week names to navigate views
+
           selectable: true,
           selectMirror: true,
-          select: function(arg) {
-            console.log('clicked')
-            var modal = document.getElementById('eventModal')
+          dateClick: function(info) {
+          var modal = document.getElementById('eventModal')
             modal.style.display = 'block'
+            date_input = moment(info.dateStr).format('YYYY-MM-DD h:mm');
+            $("#id_start_date").val(date_input)
+            console.log(date_input)
             calendar.unselect()
           },
 
 
           eventClick: function(info) {
-            console.log('clicked DeleteEventModal')
             var modal = document.getElementById('DeleteEventModal')
-            $("#event_id_name").text(info.event.title)
-            $("#event_id_start").text(formatDate(info.event.start))
-            $("#event_id_end").text(formatDate(info.event.end))
-
             getEventDeleteUrl(info.event.id)
             getEventUpdateUrl(info.event.id)
             modal.style.display = 'block'
             calendar.unselect()
+            $("#event_id_name").text(info.event.title)
+            $("#event_id_start").text(moment(info.event.start).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(info.event.end).format('h:mm:ss a, MMMM Do YYYY'))
 
           },
 
@@ -159,7 +171,6 @@ $("#eventModal").css("display","block");
 
         calendar.render();
       });
-
 </script>
 {% endblock %}
 
