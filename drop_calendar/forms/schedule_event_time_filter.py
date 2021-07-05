@@ -28,12 +28,12 @@ class ClassScheduleEventFilter(forms.ModelForm):
         ]
         widgets = {
             'schedule_class': forms.Select(attrs={
-                'id': 'branch',
+                'id': 'schedule_class',
                 'class': 'form-control',
                 'style': 'display: inline-block; width:99%',
             }),
             'class_sanction': forms.Select(attrs={
-                'id': 'department',
+                'id': 'class_sanction',
                 'class': 'form-control',
                 'style': 'display: inline-block; width:99%',
             }),

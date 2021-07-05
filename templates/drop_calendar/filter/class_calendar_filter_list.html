@@ -1,0 +1,14 @@
+{% for object in object_list %}
+<tr>
+    <td>1</td>
+    <td>{{object.schedule_class}}</td>
+    <td>{{object.class_sanction}}</td>
+    <td>@DK</td>
+    <td>
+        <a class="btn btn-info"
+           href="{% url 'drop_calendar:class_schedule_view' pk=object.pk %}">
+            <i class="fa fa-eye"></i>
+        </a>
+
+</tr>
+{% endfor %}

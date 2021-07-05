@@ -37,16 +37,17 @@ class ClassCalenderList(
         return kwargs
 
 
-def class_calender_list(request):
-    template_name = "drop_calendar/class_calendar_list.html"
+def class_calender_list_filter(request):
+    template_name = "drop_calendar/filter/class_calendar_filter_list.html"
 
-    admission_class = request.GET.get('class')
-    sanction = request.GET.get('sanction')
+    admission_class = request.GET.get('schedule_class')
+    sanction = request.GET.get('class_sanction')
+    object_list = None
     if admission_class and sanction:
         object_list = ClassScheduleEvent.objects.filter(
             schedule_class=admission_class,
             class_sanction=sanction
-        )
+        )[:1]
     context = {
         'object_list': object_list
     }

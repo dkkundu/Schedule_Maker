@@ -19,12 +19,14 @@ DK
             <div class="col-md-3">
                 <div id="external-events">
                     <h4 class="mb-4">Events Filter</h4>
-                    <div class="fc-event">
-                        {{ filter.schedule_class }}
-                    </div>
-                    <div class="fc-event">
-                        {{ filter.class_sanction }}
-                    </div>
+                    <form id="filter_form" enctype="multipart/form-data" class="form-register" method="POST" accept-charset="UTF-8" data-class-schedule-url={% url 'drop_calendar:load_data_class_calender' %}>
+                        <div class="fc-event">
+                            {{ filter.schedule_class }}
+                        </div>
+                        <div class="fc-event">
+                            {{ filter.class_sanction }}
+                        </div>
+                    </form>
 
                 </div>
             </div>
@@ -41,7 +43,7 @@ DK
                             <th>Action</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="load_list">
                         {% for object in object_list %}
                         <tr>
                             <td>1</td>
@@ -74,6 +76,31 @@ DK
 
 
 {% block extra_ja %}
+<script>
+function LoadAjax(){
+    var url = $("#filter_form").attr("data-class-schedule-url");
+    var schedule_classID = $("#schedule_class").val();
+    var class_sanctionID = $("#class_sanction").val();
+    $.ajax({
+        url: url,
+        data: {
+        'schedule_class': schedule_classID,
+        'class_sanction': class_sanctionID,
+        },
+        success: function (data) {
+        $("#load_list").html(data);
+        }
+    });
+}
+
+
+$("#schedule_class").change(function (){
+    LoadAjax();
+});
+$("#class_sanction").change(function (){
+    LoadAjax();
+});
+</script>
 {% endblock %}
 
 

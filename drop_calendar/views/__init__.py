@@ -11,7 +11,10 @@ from .event_view_only import (
     CalenderIndexPageViewOnly,
     ClassScheduleEventCalenderViewOnly,
 )
-from .class_calendar_list import ClassCalenderList
+from .class_calendar_list import (
+    ClassCalenderList,
+    class_calender_list_filter
+)
 __all__ = [
     CalendarIndex,
     CalenderIndexPage,
@@ -22,5 +25,6 @@ __all__ = [
     class_schedule_event_delete_view,
     CalenderIndexPageViewOnly,
     ClassScheduleEventCalenderViewOnly,
-    ClassCalenderList
+    ClassCalenderList,
+    class_calender_list_filter
 ]

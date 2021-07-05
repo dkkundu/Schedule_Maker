@@ -11,6 +11,7 @@ app_name = 'drop_calendar'
 urlpatterns = [
     # index url ---------------------------------------------------------------
     path('', views.CalenderIndexPage.as_view(), name='calender_view'),
+
     path('event/<int:pk>/update/',
          views.ScheduleEventUpdate.as_view(), name='event_update'
          ),
@@ -34,6 +35,9 @@ urlpatterns = [
          ),
     path('class/<int:pk>/Schedule/',
          views.ClassScheduleEventCalenderViewOnly.as_view(), name='class_schedule_view'
+         ),
+    path('class/schedule/filter/',
+         views.class_calender_list_filter, name='load_data_class_calender'
          ),
 
 

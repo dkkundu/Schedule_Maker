@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin, LoginRequiredMixin, PermissionRequiredMixin
 )
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from drop_calendar.forms import EventTimeFilter
 import datetime
 
