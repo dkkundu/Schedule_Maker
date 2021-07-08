@@ -165,7 +165,9 @@ class ClassScheduleEventCalenderViewOnly(
             "form": ClassScheduleEventForm,
             "filter": EventTimeFilter,
             "events": GroupOrClass,
-            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "schedule_class": quarry_object.schedule_class.name,
+            "class_sanction": quarry_object.class_sanction.name,
         }
         return render(request, self.template_name, context)
 

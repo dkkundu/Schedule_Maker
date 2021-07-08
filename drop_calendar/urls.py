@@ -45,6 +45,9 @@ urlpatterns = [
     path('class/sanction/event/delete/',
          views.class_sanction_schedule_event_delete_view, name='class_sanction_event_delete'
          ),
+    path('download/<int:pk>/schedule/',
+         views.ClassScheduleEventCalenderPDFView.as_view(), name='class_schedule_download'
+         ),
 
 
     ]

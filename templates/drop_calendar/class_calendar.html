@@ -162,6 +162,12 @@ function getEventDeleteUrl(pk){
           },
           initialDate: new Date(),
           initialView: 'timeGridWeek',
+          views: {
+             timeGridWeek: {
+             dayHeaderFormat: { weekday: 'long' },
+             }
+          },
+
           selectable: true,
           selectMirror: true,
           dateClick: function(info) {

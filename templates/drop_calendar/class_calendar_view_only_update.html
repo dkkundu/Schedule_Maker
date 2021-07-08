@@ -138,6 +138,11 @@ function getEventUpdateUrl(pk){
           firstDay:6,
           initialDate: today,
           initialView: 'timeGridWeek',
+          views: {
+             timeGridWeek: {
+             dayHeaderFormat: { weekday: 'long' },
+             }
+          },
 
 
           selectable: true,

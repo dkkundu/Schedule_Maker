@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BKSP - Result</title>
+    <style>
+
+    body {
+     font-family: arial, sans-serif;
+     border-collapse: collapse;
+     width: 100%;
+     background: #fff;
+    }
+    @page {
+    size: "A4";
+    margin: 2.0cm 1.5cm 0cm 1.5cm;
+    }
+    .mar-top{
+        margin-top: -15px;
+    }
+    .mg-top-pos{
+        margin-top: 10px;
+    }
+    .margin-both{
+        margin: 0 5%;
+    }
+    .mytable{
+        border-style: none !important;
+    }
+    .detail-td{
+       margin-right: -100px;
+
+    }
+
+
+
+
+
+</style>
+
+<link href="{% static 'drop_calendar/calender/main.css' %}" rel="stylesheet" />
+
+
+
+</head>
+<body>
+
+    <div class="col-md-12">
+        <div id="calendar"></div>
+    </div>
+    hello
+
+
+
+
+<script src="{% static 'drop_calendar/calender/main.js' %}"></script>
+<script src="{% static 'drop_calendar/jquery-ui.min.js' %}"></script>
+<script src="{% static 'drop_calendar/jquery.datetimepicker.full.min.js' %}"></script>
+<script src="{% static 'drop_calendar/custom.js' %}"></script>
+<script>
+       document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var today = new Date();
+
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+          },
+          initialDate: today,
+
+          selectable: true,
+          selectMirror: true,
+
+          dateClick: function(info) {
+          var modal = document.getElementById('eventModal')
+            modal.style.display = 'block'
+            start_date_input = moment(info.dateStr).format('YYYY-MM-DD HH:mm');
+            end_date_input = moment(info.dateStr).add(60, 'minutes').format('YYYY-MM-DD HH:mm');
+            $("#id_start_date").val(start_date_input)
+            $("#id_end_date").val(end_date_input)
+            console.log(date_input)
+            calendar.unselect()
+          },
+
+          eventClick: function(info) {
+            var modal = document.getElementById('DeleteEventModal')
+            getEventDeleteUrl(info.event.id)
+            getEventUpdateUrl(info.event.id)
+            modal.style.display = 'block'
+            calendar.unselect()
+
+            var start = info.event.start
+            var end_same_date = info.event.end_same_date
+            var end = info.event.end || end_same_date
+
+            $("#event_id_name").text(info.event.title)
+            $("#event_id_start").text(moment(start).format('h:mm:ss a, MMMM Do YYYY'))
+            $("#event_id_end").text(moment(end).format('h:mm:ss a, MMMM Do YYYY'))
+
+          },
+
+          editable: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+          events: {{ event_data|safe }},
+        });
+
+        calendar.render();
+      });
+      const closeBtn1 = document.getElementById('modalClose1');
+      const closeBtn2 = document.getElementById('modalClose2');
+      closeBtn1.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
+      closeBtn2.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
+</script>
+</body>
+</html>

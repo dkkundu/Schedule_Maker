@@ -17,6 +17,7 @@ from .class_calendar_list import (
     ClassCalenderList,
     class_calender_list_filter
 )
+from .get_calendar_copy_pdf import ClassScheduleEventCalenderPDFView
 __all__ = [
     CalendarIndex,
     CalenderIndexPage,
@@ -30,5 +31,6 @@ __all__ = [
     ClassCalenderList,
     ClassScheduleEventCalenderViewUpdate,
     class_calender_list_filter,
-    class_sanction_schedule_event_delete_view
+    class_sanction_schedule_event_delete_view,
+    ClassScheduleEventCalenderPDFView
 ]
