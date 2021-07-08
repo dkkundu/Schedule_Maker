@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 # CORE IMPORTS
-from Core.views import IndexView, SignupView, LoginView
+from Core.views import SignupView, LoginView
 from drop_calendar.views import CalendarIndex
 
 urlpatterns = [

@@ -37,9 +37,14 @@ span.asteriskField {
     color: #000000 !important;
 }
 </style>
-
 {% endblock style %}
 
+
+
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'drop_calendar:calender_view' %}">General Schedule</a></li>
+{% endblock %}
 
 {% block content %}
 <div class="row">

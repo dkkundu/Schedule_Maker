@@ -11,5 +11,6 @@ __all__ = [
     GroupOrClass,
     ScheduleEventForm,
     EventTimeFilter,
-    ClassScheduleEventForm
+    ClassScheduleEventForm,
+    ClassScheduleEventFilter
 ]

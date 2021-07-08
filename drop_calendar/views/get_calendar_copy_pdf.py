@@ -36,11 +36,13 @@ class ClassScheduleEventCalenderPDFView(
             "event_data": json.dumps(event_arr),
             "event": query,
             "object": quarry_object,
-            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "load_date": quarry_object.start_date.strftime(
+                "%Y-%m-%dT%H:%M:%SZ"
+            ),
             "schedule_class": quarry_object.schedule_class.name,
             "class_sanction": quarry_object.class_sanction.name,
         }
 
         return render_pdf(
-            request, self.template_name, context, 'appname'
+            request, self.template_name, context, 'schedule'
         )

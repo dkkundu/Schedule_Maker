@@ -29,8 +29,12 @@ class ScheduleEventForm(forms.ModelForm):
         self.fields['end_date'].required = True
         self.fields['name'].required = True
         self.fields['event_type'].required = True
-        self.fields['start_date'].widget.attrs['placeholder'] = 'Start Date (YY-MM-DD H:M)'
-        self.fields['end_date'].widget.attrs['placeholder'] = 'End Date (YY-MM-DD H:M)'
+        self.fields['start_date'].widget.attrs[
+            'placeholder'
+        ] = 'Start Date (YY-MM-DD H:M)'
+        self.fields['end_date'].widget.attrs[
+            'placeholder'
+        ] = 'End Date (YY-MM-DD H:M)'
 
 
 class ClassScheduleEventForm(forms.ModelForm):
@@ -59,6 +63,9 @@ class ClassScheduleEventForm(forms.ModelForm):
         self.fields['event_type'].required = True
         self.fields['class_sanction'].required = True
         self.fields['schedule_class'].required = True
-        self.fields['start_date'].widget.attrs['placeholder'] = 'Start Date (YY-MM-DD H:M)'
-        self.fields['end_date'].widget.attrs['placeholder'] = 'End Date (YY-MM-DD H:M)'
-
+        self.fields['start_date'].widget.attrs[
+            'placeholder'
+        ] = 'Start Date (YY-MM-DD H:M)'
+        self.fields['end_date'].widget.attrs[
+            'placeholder'
+        ] = 'End Date (YY-MM-DD H:M)'

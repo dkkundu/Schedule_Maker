@@ -37,4 +37,3 @@ class ClassScheduleEventAdmin(admin.ModelAdmin):
         'name', 'start_date', 'end_date', 'event_type',
         'schedule_class', 'class_sanction'
     ]
-

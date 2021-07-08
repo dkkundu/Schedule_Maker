@@ -2,7 +2,7 @@ import logging
 from django.shortcuts import render
 from django.views.generic import ListView
 from drop_calendar.models import (
-    ClassScheduleEvent, ClassSanction
+    ClassScheduleEvent
 )
 from drop_calendar.forms import ClassScheduleEventFilter
 from django.contrib.auth.mixins import (

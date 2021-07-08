@@ -1,6 +1,5 @@
 import json
 import logging
-
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -11,7 +10,6 @@ from drop_calendar.models import (
     ScheduleEvent,
     ClassScheduleEvent
 )
-
 from drop_calendar.forms import (
     GroupOrClass,
     ScheduleEventForm,
@@ -24,7 +22,6 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from drop_calendar.forms import EventTimeFilter
 import datetime
-
 logger = logging.getLogger(__name__)
 
 
@@ -44,8 +41,12 @@ class CalenderIndexPageViewOnly(
         return self.request.user.is_active  # any active user
 
     def get(self, request, **kwargs):
-        today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-        today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+        today_min = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.min
+        )
+        today_max = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.max
+        )
         query = self.model.objects.custom_filter()
         event_arr = []
         if query:
@@ -119,7 +120,9 @@ class ClassScheduleEventCalenderViewOnly(
             "filter": EventTimeFilter,
             "object": quarry_object,
             "events": GroupOrClass,
-            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "load_date": quarry_object.start_date.strftime(
+                "%Y-%m-%dT%H:%M:%SZ"
+            ),
             "schedule_class": quarry_object.schedule_class.name,
             "class_sanction": quarry_object.class_sanction.name,
         }
@@ -165,7 +168,9 @@ class ClassScheduleEventCalenderViewOnly(
             "form": ClassScheduleEventForm,
             "filter": EventTimeFilter,
             "events": GroupOrClass,
-            "load_date": quarry_object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "load_date": quarry_object.start_date.strftime(
+                "%Y-%m-%dT%H:%M:%SZ"
+            ),
             "schedule_class": quarry_object.schedule_class.name,
             "class_sanction": quarry_object.class_sanction.name,
         }
@@ -186,7 +191,9 @@ class ClassScheduleEventCalenderViewUpdate(
         return self.request.user.is_active  # any active user
 
     def get_context_data(self, **kwargs):
-        context = super(ClassScheduleEventCalenderViewUpdate, self).get_context_data()
+        context = super(
+            ClassScheduleEventCalenderViewUpdate, self
+        ).get_context_data()
         query = self.model.objects.filter(
             schedule_class=self.object.schedule_class,
             class_sanction=self.object.class_sanction
@@ -208,7 +215,9 @@ class ClassScheduleEventCalenderViewUpdate(
         context["event_data"] = json.dumps(event_arr)
         context["event"] = query
         context["object"] = self.object
-        context["load_date"] = self.object.start_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        context["load_date"] = self.object.start_date.strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
         context["schedule_class"] = self.object.schedule_class.name
         context["class_sanction"] = self.object.class_sanction.name
         return context
@@ -222,13 +231,19 @@ class ClassScheduleEventCalenderViewUpdate(
             print(form.errors)
             messages.warning(self.request, "Unable to Save Data")
             logger.debug(self.request, "Unable to Save Data")
-            return reverse_lazy('drop_calendar:class_schedule_view', kwargs={'pk': self.object.pk})
+            return reverse_lazy(
+                'drop_calendar:class_schedule_view',
+                kwargs={'pk': self.object.pk}
+            )
         return super().form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, "Successfully Updated")
         logger.debug("Successfully Updated")
-        return reverse_lazy('drop_calendar:class_schedule_view', kwargs={'pk': self.object.pk})
+        return reverse_lazy(
+            'drop_calendar:class_schedule_view',
+            kwargs={'pk': self.object.pk}
+        )
 
 
 @login_required
@@ -256,8 +271,11 @@ def class_sanction_schedule_event_delete_view(request):
     logger.debug("Successfully Deleted")
     messages.warning(request, "All Schedule Are Deleted, Please add more")
     if load_object:
-        return redirect(reverse_lazy('drop_calendar:class_schedule_view', kwargs={'pk': load_object.pk}))
+        return redirect(
+            reverse_lazy(
+                'drop_calendar:class_schedule_view',
+                kwargs={'pk': load_object.pk}
+            )
+        )
     else:
         return redirect("drop_calendar:class_calender_list")
-
-

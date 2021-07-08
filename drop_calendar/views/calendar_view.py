@@ -1,15 +1,11 @@
 import json
 import logging
-
-from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
 from drop_calendar.models import (
     ScheduleEvent,
-    Events,
     ClassScheduleEvent
 )
-from django.utils import timezone
 
 from drop_calendar.forms import (
     GroupOrClass,
@@ -44,8 +40,12 @@ class CalenderIndexPage(
         return self.request.user.is_active  # any active user
 
     def get(self, request, **kwargs):
-        today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-        today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+        today_min = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.min
+        )
+        today_max = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.max
+        )
         query = self.model.objects.custom_filter()
         event_arr = []
         if query:
@@ -98,7 +98,6 @@ class ScheduleEventUpdate(
     model = ScheduleEvent
     form_class = ScheduleEventForm
     permission_required = "drop_calendar.add_scheduleevent"
-
 
     def test_func(self):
         """Tests if the user is active"""
@@ -179,9 +178,15 @@ class ClassScheduleEventCalender(
         return self.request.user.is_active  # any active user
 
     def get(self, request, **kwargs):
-        today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-        today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
-        query = self.model.objects.custom_filter().filter(created_at__range=(today_min, today_max))
+        today_min = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.min
+        )
+        today_max = datetime.datetime.combine(
+            datetime.date.today(), datetime.time.max
+        )
+        query = self.model.objects.custom_filter().filter(
+            created_at__range=(today_min, today_max)
+        )
         event_arr = []
         if query:
             for i in query:
